@@ -3,10 +3,14 @@ Simple script to stream sound from Jamulus to an Icecast server. Also shows list
 
 ![](example.webp)
 
+## Assumptions
+Everything runs on the same machine (accessible from `localhost`).
+
 ## Requirements
+- Jamulus server running on default port
+- Icecast server running on port 8000
 - JACK
 - Jamulus client compiled from source [with this patch applied](https://github.com/dtinth/jamulus/commit/9f967bbb0f0e56d75f0b21e1b07761c9293a5ab2.patch) with executable located at `../jamulus/Jamulus`
-- Icecast server running on localhost port 8000
 - Ruby 2.5 or later
 - ffmpeg
 
