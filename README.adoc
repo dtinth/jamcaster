@@ -2,37 +2,6 @@
 
 Docker container to broadcast Jamulus sound to an Icecast server.
 
-== Environment variables
+For more information, check out the https://docs.dt.in.th/jamcaster/index.html[project documention page].
 
-`ICECAST_MOUNT_POINT`::
-The mount point to use for the Icecast server.
-+
-Example: `icecast://source:<passworld>@<host>:<port>/<mountpoint>`
-
-`JAMULUS_SERVER`::
-Jamulus server to connect to.
-+
-Example: `<host>:<port>`
-
-`JAMULUS_CLIENT_INSTRUMENT`::
-The instrument number to use for the Jamulus client. The list of available
-instruments can be found https://github.com/jamulussoftware/jamulus/blob/417a9bc8c26cdf06fb301cdfaa96e3f875a52666/src/util.cpp#L893-L1037[here], where `None` is 0.
-+
-Example: `24` (streamer)
-
-`JAMULUS_CLIENT_NAME`::
-The name to use for the Jamulus client.
-
-== Usage
-
-TIP: Do not run this on the same server that runs the Jamulus server — it may result in degraded performance. From our testing, Jamcaster consumes about 15% of a 2.2 GHz Intel Xeon core. Better get a cheap server dedicated to streaming.
-
-[source,shell]
-----
-echo '
-ICECAST_MOUNT_POINT=icecast://source:<passworld>@<host>:<port>/<mountpoint>
-JAMULUS_SERVER=<host>:<port>
-' > jamcaster.env
-
-docker run -ti --rm --init --env-file=jamcaster.env ghcr.io/dtinth/jamcaster:main
-----
+image::https://ss.dt.in.th/api/screenshots/docs-jamcaster__index.png[link="https://docs.dt.in.th/jamcaster/index.html"]
