@@ -10,7 +10,15 @@ The mount point to use for the Icecast server.
 Example: `icecast://source:<passworld>@<host>:<port>/<mountpoint>`
 
 `JAMULUS_SERVER`::
-Jamulus server to connect to
+Jamulus server to connect to.
 +
 Example: `<host>:<port>`
 
+`JAMULUS_CLIENT_INSTRUMENT`::
+The instrument number to use for the Jamulus client. The list of available
+instruments can be found https://github.com/jamulussoftware/jamulus/blob/417a9bc8c26cdf06fb301cdfaa96e3f875a52666/src/util.cpp#L893-L1037[here], where `None` is 0.
++
+Example: `24` (streamer)
+
+`JAMULUS_CLIENT_NAME`::
+The name to use for the Jamulus client.
