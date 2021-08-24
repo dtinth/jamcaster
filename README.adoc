@@ -22,3 +22,15 @@ Example: `24` (streamer)
 
 `JAMULUS_CLIENT_NAME`::
 The name to use for the Jamulus client.
+
+== Usage
+
+[source,shell]
+----
+echo '
+ICECAST_MOUNT_POINT=icecast://source:<passworld>@<host>:<port>/<mountpoint>
+JAMULUS_SERVER=<host>:<port>
+' > jamcaster.env
+
+docker run -ti --rm --init --env-file=jamcaster.env ghcr.io/dtinth/jamcaster:main
+----
