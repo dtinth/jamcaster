@@ -25,6 +25,8 @@ The name to use for the Jamulus client.
 
 == Usage
 
+TIP: Do not run this on the same server that runs the Jamulus server — it may result in degraded performance. From our testing, Jamcaster consumes about 15% of a 2.2 GHz Intel Xeon core. Better get a cheap server dedicated to streaming.
+
 [source,shell]
 ----
 echo '
