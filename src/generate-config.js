@@ -1,5 +1,5 @@
 const instrument = +process.env.JAMULUS_CLIENT_INSTRUMENT || 24;
-const name = process.env.JAMULUS_CLIENT_NAME || "";
+const name = (process.env.JAMULUS_CLIENT_NAME || "%s").replace("%s", "0");
 
 console.log(`<client>
  <language>en</language>

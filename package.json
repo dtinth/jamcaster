@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "execa": "^5.1.1"
+    "axios": "^0.21.1",
+    "delay": "^5.0.0",
+    "execa": "^5.1.1",
+    "jayson": "^3.6.4",
+    "make-promises-safe": "^5.1.0",
+    "wait-on": "^6.0.0"
   }
 }
