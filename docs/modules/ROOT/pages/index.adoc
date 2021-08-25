@@ -1,4 +1,5 @@
 = jamcaster
+:collapsible:
 
 Docker container to broadcast Jamulus sound to an Icecast server.
 
@@ -13,6 +14,22 @@ JAMULUS_SERVER=<host>:<port>
 
 docker run -ti --rm --init --env-file=jamcaster.env ghcr.io/dtinth/jamcaster:main
 ----
+
+.Docker compose
+[%collapsible.result]
+====
+.docker-compose.yml
+[source,yaml]
+----
+version: "2.4"
+services:
+  jamcaster:
+    image: ghcr.io/dtinth/jamcaster:main
+    environment:
+      - ICECAST_MOUNT_POINT=icecast://source:<passworld>@<host>:<port>/<mountpoint>
+      - JAMULUS_SERVER=<host>:<port>
+----
+====
 
 == Environment variables
 
