@@ -33,7 +33,7 @@ instruments can be found https://github.com/jamulussoftware/jamulus/blob/417a9bc
 Example: `24` (streamer)
 
 `JAMULUS_CLIENT_NAME`::
-The name to use for the Jamulus client.
+The name to use for the Jamulus client. The special token `%s` will be replaced by the current number of listeners.
 
 == Links
 
