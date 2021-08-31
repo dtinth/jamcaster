@@ -9,7 +9,7 @@
       body {
         background: #000;
         color: #888;
-        font-size: 48px;
+        font-size: 36px;
         font-family: Cousine;
       }
       #time {
@@ -56,14 +56,21 @@
             >
             </span>
             {{item.info.name}}
+            <small>({{item.instrument}})</small>
           </div>
         </div>
       </div>
     </div>
     <script src="vendor/vue@2.6.14.min.js"></script>
+    <script src="data.js"></script>
     <script>
       function getCurrentTime() {
-        time.innerHTML = new Date().toISOString().split('T')[1].split('.')[0]
+        time.innerHTML = new Date(
+          Date.now() - new Date().getTimezoneOffset() * 60000,
+        )
+          .toISOString()
+          .split('T')[1]
+          .split('.')[0]
       }
 
       const app = new Vue({
@@ -93,6 +100,7 @@
         },
         methods: {
           handleLevelList(channelLevelList) {
+            console.log('level', channelLevelList)
             for (let i = 0; i < channelLevelList.length; i++) {
               const level = channelLevelList[i]
               const active = level > 0
@@ -106,6 +114,7 @@
                 }
               } else {
                 if (this.activeMap[i]) {
+                  this.activeMap[i].level = 0
                   if (Date.now() >= this.activeMap[i].time + 5000) {
                     delete this.activeMap[i]
                   }
@@ -115,8 +124,9 @@
             this.activeMap = { ...this.activeMap }
           },
           handleClientList(clients) {
+            console.log('clients', clients)
             this.clients = Object.fromEntries(
-              clients.map((client) => [client.id, client]),
+              clients.map((client, i) => [i, client]),
             )
           },
         },
@@ -132,6 +142,7 @@
                   {
                     id: info.id,
                     client,
+                    instrument: $instruments[info.instrumentId],
                     info,
                   },
                 ]

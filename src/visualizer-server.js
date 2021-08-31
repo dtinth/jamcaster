@@ -23,6 +23,7 @@ async function worker() {
       })
       await new Promise((resolve) => {
         connection.on('end', resolve)
+        connection.on('close', resolve)
         connection
           .pipe(ndjson.parse())
           .on('data', (data) => {
