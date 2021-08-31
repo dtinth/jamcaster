@@ -1,8 +1,10 @@
 {
   "dependencies": {
     "axios": "^0.21.1",
+    "cors": "^2.8.5",
     "delay": "^5.0.0",
     "execa": "^5.1.1",
+    "express": "^4.17.1",
     "jayson": "^3.6.4",
     "make-promises-safe": "^5.1.0",
     "wait-on": "^6.0.0"
