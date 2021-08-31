@@ -2,9 +2,14 @@
 
 : ${JAMULUS_SERVER:?"Missing required environment variable JAMULUS_SERVER"}
 
-if [ -n "$VIDEO_STREAM_TARGET" ]
+if [ -n "$DEV_MODE" ]
+then
+  echo "Sleeping infinitely."
+  sleep infinity
+elif [ -n "$VIDEO_STREAM_TARGET" ]
 then
   # Video mode
+  cp src/supervisor-video.conf /etc/supervisor/conf.d/video.conf
   exec xvfb-run --server-args="-screen 0 1280x720x24" supervisord
 else
   # Audio mode

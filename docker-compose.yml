@@ -6,3 +6,5 @@ services:
     env_file: .env
     volumes:
       - ./src:/app/src
+    ports:
+      - "5900:5900"
