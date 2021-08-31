@@ -8,7 +8,7 @@ COPY vendor/jamulus_3.8.0_ubuntu_amd64+dtinth-26dad5d.deb /tmp/jamulus_3.8.0_ubu
 RUN apt-get install -y /tmp/jamulus_3.8.0_ubuntu_amd64+dtinth-26dad5d.deb
 
 # Install tools
-RUN apt-get install -y jackd1 ffmpeg supervisor xvfb chromium pulseaudio x11vnc
+RUN apt-get install -y jackd1 ffmpeg supervisor xvfb chromium pulseaudio x11vnc tmux openbox
 
 # Copy files
 WORKDIR /app
