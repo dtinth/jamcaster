@@ -1,1 +1,6 @@
-chromium --no-sandbox --disable-dev-shm-usage --kiosk file://$PWD/src/visualizer/index.html
+docker-compose exec -e DISPLAY=:99 -e XAUTHORITY=/tmp/xauth jamcaster bash
+
+chromium --no-sandbox --disable-dev-shm-usage --kiosk http://localhost:3430
+
+apt install netcat
+nc localhost 22100

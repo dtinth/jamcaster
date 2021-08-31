@@ -1,33 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>jamcaster</title>
-  <style>
-    body {
-      background: #000;
-      color: #888;
-    }
-    #time {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      font-size: 48px;
-      color: #ffa;
-    }
-  </style>
-</head>
-<body>
-  <div id="time"></div>
-  <script>
-    const time = document.getElementById('time');
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jamcaster</title>
+    <style>
+      body {
+        background: #000;
+        color: #888;
+        font-size: 48px;
+        font-family: Cousine;
+      }
+      #time {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        font-size: 48px;
+        color: #ffa;
+      }
+      #list {
+        position: fixed;
+        top: 64px;
+        left: 64px;
+      }
+      .client {
+        margin-bottom: 0.32ex;
+      }
+      .level-block {
+        display: inline-block;
+        vertical-align: middle;
+        width: 1ex;
+        height: 1.8ex;
+        background: #333;
+        margin-right: 0.64ex;
+        --active-color: #6c3;
+      }
+      .level-block[data-active='true'] {
+        background: var(--active-color);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="time">{{time}}</div>
+      <div id="list">
+        <div class="client" v-for="item of activeClients" :key="item.id">
+          <div>
+            <span
+              class="level-block"
+              v-for="block of levelBlocks"
+              :key="block"
+              :data-block="block"
+              :data-active="item.client.level >= block"
+            >
+            </span>
+            {{item.info.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="vendor/vue@2.6.14.min.js"></script>
+    <script>
+      function getCurrentTime() {
+        time.innerHTML = new Date().toISOString().split('T')[1].split('.')[0]
+      }
 
-    // Update the time every second
-    setInterval(() => {
-      time.innerHTML = new Date().toISOString().split('T')[1].split('.')[0];
-    });
-  </script>
-</body>
+      const app = new Vue({
+        el: '#app',
+        data: {
+          time: getCurrentTime(),
+          clients: {},
+          activeMap: {},
+          levelBlocks: [1, 2, 3, 4, 5, 6, 7, 8],
+        },
+        mounted() {
+          setInterval(() => {
+            this.time = getCurrentTime()
+          }, 1000)
+
+          const eventSource = new EventSource('/events')
+          eventSource.onmessage = (event) => {
+            const data = JSON.parse(event.data)
+            if (data.method === 'jamulusclient/channelLevelListReceived') {
+              this.handleLevelList(data.params.channelLevelList)
+            } else if (data.method === 'jamulusclient/clientListReceived') {
+              this.handleClientList(data.params.clients)
+            } else if (data.result && data.result.clients) {
+              this.handleClientList(data.result.clients)
+            }
+          }
+        },
+        methods: {
+          handleLevelList(channelLevelList) {
+            for (let i = 0; i < channelLevelList.length; i++) {
+              const level = channelLevelList[i]
+              const active = level > 0
+              if (active) {
+                this.activeMap[i] = {
+                  level: level,
+                  firstSeen: this.activeMap[i]
+                    ? this.activeMap[i].firstSeen
+                    : Date.now(),
+                  time: Date.now(),
+                }
+              } else {
+                if (this.activeMap[i]) {
+                  if (Date.now() >= this.activeMap[i].time + 5000) {
+                    delete this.activeMap[i]
+                  }
+                }
+              }
+            }
+            this.activeMap = { ...this.activeMap }
+          },
+          handleClientList(clients) {
+            this.clients = Object.fromEntries(
+              clients.map((client) => [client.id, client]),
+            )
+          },
+        },
+        computed: {
+          activeClients() {
+            return Object.entries(this.activeMap)
+              .flatMap(([id, client]) => {
+                const info = this.clients[id]
+                if (!info) {
+                  return []
+                }
+                return [
+                  {
+                    id: info.id,
+                    client,
+                    info,
+                  },
+                ]
+              })
+              .sort((a, b) => {
+                return a.client.firstSeen - b.client.firstSeen
+              })
+          },
+        },
+      })
+    </script>
+  </body>
 </html>

@@ -8,3 +8,4 @@ services:
       - ./src:/app/src
     ports:
       - "5900:5900"
+      - "3430:3430"

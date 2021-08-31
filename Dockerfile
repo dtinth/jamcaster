@@ -8,7 +8,7 @@ COPY vendor/jamulus_3.8.0_ubuntu_amd64+dtinth-aadabea.deb /tmp/jamulus_3.8.0_ubu
 RUN apt-get install -y /tmp/jamulus_3.8.0_ubuntu_amd64+dtinth-aadabea.deb
 
 # Install tools
-RUN apt-get install -y jackd1 ffmpeg supervisor xvfb chromium pulseaudio x11vnc tmux openbox
+RUN apt-get install -y jackd1 ffmpeg supervisor xvfb chromium x11vnc tmux openbox fonts-noto-color-emoji fonts-noto fonts-noto-cjk
 
 # Copy files
 WORKDIR /app
