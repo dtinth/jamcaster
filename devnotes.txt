@@ -1,1 +1,1 @@
-chromium --no-sandbox --disable-dev-shm-usage --kiosk
+chromium --no-sandbox --disable-dev-shm-usage --kiosk file://$PWD/src/visualizer/index.html

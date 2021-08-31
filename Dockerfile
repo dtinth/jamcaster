@@ -4,8 +4,8 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y
 
 # Install Jamulus
-COPY vendor/jamulus_3.8.0_ubuntu_amd64+dtinth-26dad5d.deb /tmp/jamulus_3.8.0_ubuntu_amd64+dtinth-26dad5d.deb
-RUN apt-get install -y /tmp/jamulus_3.8.0_ubuntu_amd64+dtinth-26dad5d.deb
+COPY vendor/jamulus_3.8.0_ubuntu_amd64+dtinth-aadabea.deb /tmp/jamulus_3.8.0_ubuntu_amd64+dtinth-aadabea.deb
+RUN apt-get install -y /tmp/jamulus_3.8.0_ubuntu_amd64+dtinth-aadabea.deb
 
 # Install tools
 RUN apt-get install -y jackd1 ffmpeg supervisor xvfb chromium pulseaudio x11vnc tmux openbox
