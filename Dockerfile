@@ -1,4 +1,4 @@
-FROM node:14-buster
+FROM node:14-bullseye
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update -y
