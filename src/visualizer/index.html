@@ -78,7 +78,7 @@
                 :data-active="item.client.level >= block"
               >
               </span>
-              {{item.info.name}}
+              {{item.flag}} {{item.info.name}}
               <small>({{item.instrument}})</small>
             </div>
           </div>
@@ -164,11 +164,14 @@
                 if (!info) {
                   return []
                 }
+                const country = $countries[info.countryId]
+                const flag = (country && $flags[country]) || '🌏'
                 return [
                   {
                     id: info.id,
                     client,
                     instrument: $instruments[info.instrumentId],
+                    flag,
                     info,
                   },
                 ]
