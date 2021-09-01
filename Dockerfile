@@ -14,7 +14,6 @@ RUN apt-get install -y jackd1 ffmpeg supervisor xvfb chromium x11vnc tmux openbo
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
-COPY supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 COPY src/ src/
 
 CMD ./src/entrypoint.sh

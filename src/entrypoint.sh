@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
 : ${JAMULUS_SERVER:?"Missing required environment variable JAMULUS_SERVER"}
+cp ./src/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
 
 if [ -n "$DEV_MODE" ]
 then
