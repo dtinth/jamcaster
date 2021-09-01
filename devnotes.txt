@@ -4,3 +4,5 @@ chromium --no-sandbox --disable-dev-shm-usage --kiosk http://localhost:3430
 
 apt install netcat
 nc localhost 22100
+
+docker-compose exec jamcaster supervisorctl restart visualizer
