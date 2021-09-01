@@ -25,10 +25,8 @@
         position: fixed;
         top: 64px;
         left: 64px;
+        right: 0;
         line-height: 1.5rem;
-      }
-      .client {
-        margin-bottom: 0.32ex;
       }
       .level-block {
         display: inline-block;
@@ -45,6 +43,12 @@
         background: var(--active-color);
       }
 
+      .client {
+        position: absolute;
+        left: 0;
+        top: 0;
+        transition: transform 0.5s ease-out;
+      }
       .list-enter-active,
       .list-leave-active {
         transition: all 0.5s;
@@ -54,9 +58,6 @@
         opacity: 0;
         transform: translateX(-30px);
       }
-      .list-move {
-        transition: transform 0.5s ease-out;
-      }
     </style>
   </head>
   <body>
@@ -64,8 +65,11 @@
       <div id="time">{{time}}</div>
       <div id="list">
         <transition-group name="list" tag="div">
-          <div class="client" v-for="item of activeClients" :key="item.id">
-            <div>
+          <div v-for="item of activeClients" :key="item.id">
+            <div
+              class="client"
+              :style="{ transform: 'translate(0, ' + item.index * 2 + 'rem)' }"
+            >
               <span
                 class="level-block"
                 v-for="block of levelBlocks"
@@ -171,7 +175,13 @@
               })
               .sort((a, b) => {
                 return b.client.total - a.client.total
-                // return a.client.firstSeen - b.client.firstSeen
+              })
+              .map((x, i) => {
+                x.index = i
+                return x
+              })
+              .sort((a, b) => {
+                return a.id - b.id
               })
           },
         },
