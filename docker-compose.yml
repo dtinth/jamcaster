@@ -1,4 +1,4 @@
-version: "2.4"
+version: '2.4'
 services:
   jamcaster:
     build:
@@ -7,5 +7,6 @@ services:
     volumes:
       - ./src:/app/src
     ports:
-      - "5900:5900"
-      - "3430:3430"
+      - 5900:5900 # VNC
+      - 3430:3430 # Jamviz
+      - 22100:22100 # Jamulus JSON-RPC
