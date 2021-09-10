@@ -7,31 +7,37 @@ Docker container to broadcast Jamulus sound to an Icecast server OR broadcast vi
 
 == Usage
 
+After creating the configuration file `jamcaster.env`, you can run the following command to invoke Jamcaster:
+
 [source,shell]
 ----
-echo '
-ICECAST_MOUNT_POINT=icecast://source:<passworld>@<host>:<port>/<mountpoint>
-JAMULUS_SERVER=<host>:<port>
-' > jamcaster.env
-
 docker run -ti --rm --init --env-file=jamcaster.env ghcr.io/dtinth/jamcaster:main
 ----
 
-.Docker compose
-[%collapsible.result]
-====
-.docker-compose.yml
-[source,yaml]
+=== Example configuration
+
+.Example jamcaster.env configuration to stream to Icecast server
+[source]
 ----
-version: "2.4"
-services:
-  jamcaster:
-    image: ghcr.io/dtinth/jamcaster:main
-    environment:
-      - ICECAST_MOUNT_POINT=icecast://source:<passworld>@<host>:<port>/<mountpoint>
-      - JAMULUS_SERVER=<host>:<port>
+ICECAST_MOUNT_POINT=icecast://source:<passworld>@<host>:<port>/<mountpoint>
+JAMULUS_SERVER=<host>:<port>
 ----
-====
+
+.Example jamcaster.env configuration to stream to YouTube
+[source]
+----
+VIDEO_STREAM_TARGET=rtmp://a.rtmp.youtube.com/live2/<streamkey>
+JAMULUS_SERVER=<host>:<port>
+JAMULUS_CLIENT_NAME=YouTube
+----
+
+.Example jamcaster.env configuration to stream to Facebook
+[source]
+----
+VIDEO_STREAM_TARGET=rtmps://live-api-s.facebook.com:443/rtmp/<streamkey>
+JAMULUS_SERVER=<host>:<port>
+JAMULUS_CLIENT_NAME=FBLive
+----
 
 == Environment variables
 
@@ -58,7 +64,7 @@ instruments can be found https://github.com/jamulussoftware/jamulus/blob/417a9bc
 Example: `24` (streamer)
 
 `JAMULUS_CLIENT_NAME`::
-The name to use for the Jamulus client. The special token `%s` will be replaced by the current number of listeners.
+The name to use for the Jamulus client. In Icecast mode, the special token `%s` will be replaced by the current number of listeners.
 
 == Links
 
