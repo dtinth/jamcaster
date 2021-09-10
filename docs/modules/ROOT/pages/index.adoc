@@ -3,6 +3,8 @@
 
 Docker container to broadcast Jamulus sound to an Icecast server OR broadcast video to an RTMP server (e.g. Facebook Live, YouTube Live).
 
+* https://youtu.be/3RLPLcf_oFw[**See demo video**]
+
 == Usage
 
 [source,shell]
