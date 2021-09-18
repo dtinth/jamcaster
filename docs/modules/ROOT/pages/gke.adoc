@@ -1,0 +1,134 @@
+= Running Jamcaster in GKE autopilot
+
+If you are on an unreliable internet connection but want to stream a Jamulus room, running Jamcaster on Google Kubernetes Engine in autopilot mode can be a cost-efficient way do it. You don’t have to manage virtual machines, and you don’t have to worry about the cost of running the cluster — you only pay for the time Jamcaster spends running.
+
+== How much does it cost?
+
+* For cluster management cost, https://cloud.google.com/kubernetes-engine/pricing#cluster_management_fee_and_free_tier[Google Cloud provides a free tier that covers the management fee of cluster per billing account].
+* For running cost in the Singapore region: 0.5 vCPU + 2 GB RAM + 0.3 GB egress = ~$0.08 per hour.
+
+== Prerequisites
+
+* You have a Google Cloud project.
+
+== Environment config
+
+----
+GOOGLE_CLOUD_PROJECT=
+GOOGLE_CLOUD_REGION=
+----
+
+== Create a Google Kubernetes Engine cluster
+
+NOTE: If you already have a GKE cluster, you can reuse it. https://cloud.google.com/kubernetes-engine/pricing#cluster_management_fee_and_free_tier[Google Cloud only provides you with one free Kubernetes cluster per billing account. If you have more than one, you will be charged up to $74.4 per cluster per month.]
+
+Create a GKE autopilot cluster:
+
+----
+gcloud container clusters create-auto k8s-playground --region $GOOGLE_CLOUD_REGION
+----
+
+Wait 5 minutes.
+
+Configure Kubectl:
+
+----
+gcloud container clusters get-credentials k8s-playground --region $GOOGLE_CLOUD_REGION
+----
+
+Get the nodes:
+
+----
+kubectl get nodes
+----
+
+== Push Docker image to Artifact Repository
+
+NOTE: This will cost about $0.3 per month to store the Jamcaster image on the cloud.
+
+Create an artifact repository:
+
+----
+gcloud artifacts repositories create jamcaster \
+   --repository-format=docker \
+   --location=$GOOGLE_CLOUD_REGION \
+   --description="Docker repository for jamcaster"
+----
+
+Pull Jamcaster image:
+
+----
+docker pull ghcr.io/dtinth/jamcaster:main
+----
+
+Tag the image:
+
+----
+docker tag ghcr.io/dtinth/jamcaster:main $GOOGLE_CLOUD_REGION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/jamcaster/jamcaster:main
+----
+
+Configure Docker to push to the artifact repository:
+
+----
+gcloud auth configure-docker $GOOGLE_CLOUD_REGION-docker.pkg.dev
+----
+
+Push the image to the artifact repository:
+
+----
+docker push $GOOGLE_CLOUD_REGION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/jamcaster/jamcaster:main
+----
+
+== Create a pod
+
+.jamcaster.yml
+[source]
+----
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jamcaster
+spec:
+  containers:
+    - name: jamcaster
+      image: $GOOGLE_CLOUD_REGION-docker.pkg.dev/$GOOGLE_CLOUD_PROJECT/jamcaster/jamcaster:main
+      env:
+        - name: VIDEO_STREAM_TARGET
+          value: rtmps://live-api-s.facebook.com:443/rtmp/<stream_key>
+        - name: JAMULUS_SERVER
+          value: <ip>:<port>
+        - name: JAMULUS_CLIENT_NAME
+          value: JamRadio
+  restartPolicy: OnFailure
+----
+
+NOTE: Replace the variables with your own values.
+
+== Run it
+
+----
+kubectl apply -f jamcaster.yml
+----
+
+== Debugging tips
+
+.Running commands inside the container
+----
+kubectl exec --stdin --tty jamcaster -- /bin/bash
+----
+
+.View logs
+----
+kubectl logs jamcaster -f
+----
+
+.Port-forward the VNC port
+----
+kubectl port-forward jamcaster 5901:5900
+----
+
+== Clean up
+
+----
+kubectl delete -f jamcaster.yml
+----
