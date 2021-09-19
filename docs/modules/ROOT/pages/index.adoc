@@ -66,6 +66,9 @@ Example: `24` (streamer)
 `JAMULUS_CLIENT_NAME`::
 The name to use for the Jamulus client. In Icecast mode, the special token `%s` will be replaced by the current number of listeners.
 
+`TZ`::
+The time zone to use, e.g. `Asia/Bangkok`. Use the https://en.wikipedia.org/wiki/List_of_tz_database_time_zones[TZ database name from this list].
+
 == Links
 
 * https://github.com/dtinth/jamcaster[Source code on GitHub]
