@@ -5,7 +5,7 @@ If you are on an unreliable internet connection but want to stream a Jamulus roo
 == How much does it cost?
 
 * For cluster management cost, https://cloud.google.com/kubernetes-engine/pricing#cluster_management_fee_and_free_tier[Google Cloud provides a free tier that covers the management fee of cluster per billing account].
-* For running cost in the Singapore region: 0.5 vCPU + 2 GB RAM + 0.3 GB egress = ~$0.08 per hour.
+* For running cost in the Singapore region: https://cloud.google.com/products/calculator/#id=d6c3f4c1-83d2-4836-a4c4-ccf4e8f76f99[2 vCPU + 2 GB RAM + 0.3 GB egress = ~$0.16 per hour].
 
 == Prerequisites
 
@@ -99,6 +99,13 @@ spec:
           value: <ip>:<port>
         - name: JAMULUS_CLIENT_NAME
           value: JamRadio
+      resources:
+        requests:
+          cpu: 2000m
+          memory: 1Gi
+        limits:
+          cpu: 2000m
+          memory: 1Gi
   restartPolicy: OnFailure
 ----
 
@@ -125,6 +132,11 @@ kubectl logs jamcaster -f
 .Port-forward the VNC port
 ----
 kubectl port-forward jamcaster 5901:5900
+----
+
+.Port-forward the JSON-RPC port
+----
+kubectl port-forward jamcaster 22100:22100
 ----
 
 == Clean up
